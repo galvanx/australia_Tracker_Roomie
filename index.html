@@ -93,8 +93,8 @@
                             <label for="paidBy" class="block text-sm font-medium text-gray-700 mb-1">Paid By</label>
                             <select id="paidBy" name="paidBy" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" required>
                                 <option value="" disabled selected>Select who paid</option>
-                                <option value="Galvan">Galvan</option>
-                                <option value="Roger">Roger</option>
+                                <option value="me">Me</option>
+                                <option value="roommate">Roommate</option>
                             </select>
                         </div>
                         
@@ -141,7 +141,7 @@
                         <div class="flex space-x-2">
                             <button id="filterAll" class="px-3 py-1 text-xs font-medium rounded-full bg-indigo-100 text-indigo-800">All</button>
                             <button id="filterMe" class="px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800">My Expenses</button>
-                            <button id="filterRoommate" class="px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800">Roommate's</button>
+                            <button id="filterRoommate" class="px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800">Roommate</button>
                         </div>
                     </div>
                     
@@ -379,7 +379,7 @@
                 filterMe.classList.add('bg-gray-100', 'text-gray-800');
                 filterRoommate.classList.remove('bg-gray-100', 'text-gray-800');
                 filterRoommate.classList.add('bg-indigo-100', 'text-indigo-800');
-                renderExpenseHistory('Roger');
+                renderExpenseHistory('roommate');
             });
             
             // Settle up
@@ -470,8 +470,8 @@
                     });
                     
                     // Paid by text
-                    const paidByText = `${expense.paidBy} paid`;
-                    const paidByClass = expense.paidBy === 'Galvan' ? 'text-indigo-600' : 'text-green-600';
+                    const paidByText = expense.paidBy === 'me' ? 'You paid' : 'Roommate paid';
+                    const paidByClass = expense.paidBy === 'me' ? 'text-indigo-600' : 'text-green-600';
                     
                     // Personal items list
                     let personalItemsHtml = '';
@@ -542,7 +542,7 @@
                 expenses.forEach(expense => {
                     totalSharedAmount += expense.sharedAmount;
                     
-                    if (expense.paidBy === 'Galvan') {
+                    if (expense.paidBy === 'me') {
                         totalIPaid += expense.amount;
                     } else {
                         totalRoommatePaid += expense.amount;
@@ -550,7 +550,7 @@
                     
                     // Adjust for personal items
                     expense.personalItems.forEach(item => {
-                        if (item.owner === 'Galvan') {
+                        if (item.owner === 'me') {
                             totalIPaid -= item.amount;
                         } else {
                             totalRoommatePaid -= item.amount;
